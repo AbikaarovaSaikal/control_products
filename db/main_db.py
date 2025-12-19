@@ -63,4 +63,3 @@ def delete_product(product_id=None):
 
     conn.commit()
     conn.close()
-    

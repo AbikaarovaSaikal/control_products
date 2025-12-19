@@ -21,13 +21,26 @@ def main(page: ft.Page):
     def create_product_row(product_id, product_text, purchased):
         checkbox = ft.Checkbox(value=bool(purchased), on_change=lambda e: toggle_product(product_id, e.control.value))
 
+        def enable_edit(_):
+            product_field.read_only = False
+            product_field.update()
+
+        edit_button = ft.IconButton(icon=ft.Icons.EDIT, on_click=enable_edit)
+
+        def save_product(_):
+            main_db.update_product(product_id=product_id, new_product=product_field.value)
+            product_field.read_only = True
+            product_field.update()
+
+        save_button = ft.IconButton(icon=ft.Icons.SAVE_ALT_ROUNDED, on_click=save_product)
+        
         def delete_product(_):
             main_db.delete_product(product_id=product_id)
             load_product()
             
         delete_button = ft.IconButton(icon=ft.Icons.DELETE_OUTLINE, icon_color=ft.Colors.RED, on_click=delete_product)
-        product_field = ft.TextField(value=product_text, expand=True)
-        return ft.Row([checkbox, product_field, delete_button])
+        product_field = ft.TextField(value=product_text, expand=True, read_only=True, on_submit=save_product)
+        return ft.Row([checkbox, product_field, edit_button, save_button, delete_button])
 
     def toggle_product(product_id, is_purchased):
         print(f'{product_id} - {is_purchased}')
