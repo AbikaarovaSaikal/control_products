@@ -69,6 +69,7 @@ def main(page: ft.Page):
     load_product()
 
 
+
 if __name__ == '__main__':
     main_db.init_db()
     ft.app(target=main)
